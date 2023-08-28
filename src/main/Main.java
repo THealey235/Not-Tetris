@@ -1,9 +1,11 @@
 package main;
 
 import javax.swing.JFrame;
+import java.awt.*;
+
 
 public class Main {
-    public static void main(String[] args){
+    public static void main(String[] args) {
 
         JFrame window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -20,6 +22,20 @@ public class Main {
 
         Tile.CreateTiles();
 
+        Main.UpdatePieceColour();
+
         gamePanel.startGameThread();
+    }
+
+    public static void UpdatePieceColour(){
+        switch (GamePanel.currentPiece) {
+            case "Line" -> GamePanel.pieceColour = Color.cyan;
+            case "L_left" -> GamePanel.pieceColour = Color.blue;
+            case "L_right" -> GamePanel.pieceColour = Color.orange;
+            case "Square" -> GamePanel.pieceColour = Color.yellow;
+            case "S_left" -> GamePanel.pieceColour = Color.red;
+            case "S_right" -> GamePanel.pieceColour = Color.green;
+            case "T_piece" -> GamePanel.pieceColour = GamePanel.colourPurple;
+        }
     }
 }

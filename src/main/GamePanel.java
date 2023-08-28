@@ -3,6 +3,7 @@ package main;
 import javax.swing.JPanel;
 import java.awt.*;
 
+
 public class GamePanel extends JPanel implements Runnable{
 
     // SCREEN SETTINGS
@@ -18,11 +19,19 @@ public class GamePanel extends JPanel implements Runnable{
     Color BG_colour = Color.black;
     Color borderColour= Color.white;
     Color colourGrey = new Color(90,90,90);
+    public static Color colourPurple = new Color(128,0,128);
+    public static Color pieceColour;
+
 
     KeyHandler keyH = new KeyHandler();
     Thread gameThread;
 
     //Set piece's default position
+    int pieceX = 4; //not actual x and y values, just used for index ing of Tile.board
+    int pieceY = 1;
+    public static String currentPiece = "Line";
+    int pieceSpeed = 4;
+//    Tile[] tilesInPiece = new Tile[n]; fix for collision
 
 
     public GamePanel(){
@@ -36,7 +45,6 @@ public class GamePanel extends JPanel implements Runnable{
     public void startGameThread() {
         gameThread = new Thread(this);
         gameThread.start();
-
     }
 
     //in short: the game loop
@@ -52,7 +60,7 @@ public class GamePanel extends JPanel implements Runnable{
 
     }
     public void update(){
-
+        Tile.UpdateColourOfTiles(pieceX, pieceY);
     }
     public void paintComponent(Graphics g){
 
@@ -70,12 +78,14 @@ public class GamePanel extends JPanel implements Runnable{
         for (int y = 98; y<913; y += 48){
             g2.drawLine(61, y,539, y);
         }
-        for (int i = 0; i<18; i++){
-            for (int i1 = 0; i1<10; i1++){
+        for (int i = 0; i<10; i++){
+            for (int i1 = 0; i1<18; i1++){
                 Tile currentTile = Tile.board[i][i1];
                 if (currentTile.colour != null) {
                     g2.setColor(currentTile.colour);
                     g2.fillRect(currentTile.x, currentTile.y, tileSize, tileSize);
+                    g2.setColor(borderColour);
+                    g2.drawRect(currentTile.x,currentTile.y,tileSize,tileSize);
                 }
                 }
             }
