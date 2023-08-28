@@ -6,10 +6,10 @@ import java.awt.*;
 public class GamePanel extends JPanel implements Runnable{
 
     // SCREEN SETTINGS
-    final int originalTileSize = 16; //16x16 tile
-    final int scale = 3;
+    static final int originalTileSize = 16; //16x16 tile
+    static final int scale = 3;
 
-    final int tileSize = originalTileSize * scale; //48*48
+    static final int tileSize = originalTileSize * scale; //48*48
     final int maxScreenCol = 10;//length of game board
     final int maxScreenRow = 18;//height of game board
     final int screenWidth = (tileSize * maxScreenCol) + 240;//720, I added 240 to create a border
@@ -44,15 +44,10 @@ public class GamePanel extends JPanel implements Runnable{
     public void run() {
 
         while(gameThread != null){
-
-
            //1 UPDATE: update information such as character positions
            update();
-
            //2 DRAW: draw the screen with the update information
-            repaint();
-
-
+           repaint();
         }
 
     }
@@ -66,7 +61,7 @@ public class GamePanel extends JPanel implements Runnable{
         Graphics2D g2 = (Graphics2D)g;
 
         g2.setColor(borderColour);
-        g2.drawRect(60, 50, 480, 864);
+        g2.drawRect(59, 49, 482, 866);
 
         g2.setColor(colourGrey);
         for (int x = 108; x<539; x += 48){
@@ -75,7 +70,15 @@ public class GamePanel extends JPanel implements Runnable{
         for (int y = 98; y<913; y += 48){
             g2.drawLine(61, y,539, y);
         }
-
+        for (int i = 0; i<18; i++){
+            for (int i1 = 0; i1<10; i1++){
+                Tile currentTile = Tile.board[i][i1];
+                if (currentTile.colour != null) {
+                    g2.setColor(currentTile.colour);
+                    g2.fillRect(currentTile.x, currentTile.y, tileSize, tileSize);
+                }
+                }
+            }
         g2.dispose();
-    }
+        }
 }

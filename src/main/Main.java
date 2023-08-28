@@ -18,6 +18,8 @@ public class Main {
         window.setLocationRelativeTo(null);
         window.setVisible(true);
 
+        Tile.CreateTiles();
+
         gamePanel.startGameThread();
     }
 }
