@@ -5,7 +5,7 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler  implements KeyListener {
 
-    public boolean upPressed, downPressed, leftPressed, rightPressed;
+    private boolean upBlocked, downBlocked, rightBlocked, leftBlocked = false;
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -17,16 +17,43 @@ public class KeyHandler  implements KeyListener {
         int code = e.getKeyCode(); //returns number of key pressed
 
         if (code == KeyEvent.VK_W || code == 38){ // 38 = up arrow
-            upPressed = true;
+            if (!upBlocked){
+                GamePanel.pieceRotation += 90;
+                if (GamePanel.pieceRotation == 360){
+                    GamePanel.pieceRotation = 0;
+                }
+                System.out.println("W "+GamePanel.pieceRotation);
+                Tile.ResetMovingTiles();
+            }
         }
         if (code == KeyEvent.VK_A || code == 37){  // 37 = left arrow
-            leftPressed = true;
+             if (!leftBlocked){
+                 if (!Tile.CollisionCheck()) {
+                     GamePanel.pieceX -= 1;
+                     Tile.ResetMovingTiles();
+                 }
+            }
         }
         if (code == KeyEvent.VK_S || code == 40){ // 40 = down arrow
-            downPressed = true;
+            if (!downBlocked){
+
+                if (GamePanel.pieceRotation == 0){
+                    GamePanel.pieceRotation = 270;
+                }
+                else{
+                    GamePanel.pieceRotation -= 90;
+                }
+                Tile.ResetMovingTiles();
+                System.out.println("S "+GamePanel.pieceRotation);
+            }
         }
         if (code == KeyEvent.VK_D || code == 39){ // 39 = right arrow
-            rightPressed = true;
+            if (!rightBlocked){
+                GamePanel.pieceX += 1;
+                Tile.ResetMovingTiles();
+
+            }
+
         }
 
     }
@@ -35,16 +62,16 @@ public class KeyHandler  implements KeyListener {
     public void keyReleased(KeyEvent e) {
         int code = e.getKeyCode();
         if (code == KeyEvent.VK_W || code == 38){ // 38 = up arrow
-            upPressed = false;
+            upBlocked = false;
         }
         if (code == KeyEvent.VK_A || code == 37){  // 37 = left arrow
-            leftPressed = false;
+            leftBlocked = false;
         }
         if (code == KeyEvent.VK_S || code == 40){ // 40 = down arrow
-            downPressed = false;
+            downBlocked = false;
         }
         if (code == KeyEvent.VK_D || code == 39){ // 39 = right arrow
-            rightPressed = false;
+            rightBlocked = false;
         }
     }
 }

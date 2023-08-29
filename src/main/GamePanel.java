@@ -27,10 +27,13 @@ public class GamePanel extends JPanel implements Runnable{
     Thread gameThread;
 
     //Set piece's default position
-    int pieceX = 4; //not actual x and y values, just used for index ing of Tile.board
-    int pieceY = 1;
-    public static String currentPiece = "Line";
+    final int startX = 4;
+    final int startY = 2;
+    static int pieceX = 4; //not actual x and y values, just used for index ing of Tile.board
+    int pieceY = 2;
+    public static String currentPiece = "T_Piece";
     int pieceSpeed = 4;
+    static int pieceRotation = 0;//in degrees going clockwise
 //    Tile[] tilesInPiece = new Tile[n]; fix for collision
 
 
@@ -78,14 +81,13 @@ public class GamePanel extends JPanel implements Runnable{
         for (int y = 98; y<913; y += 48){
             g2.drawLine(61, y,539, y);
         }
-        for (int i = 0; i<10; i++){
-            for (int i1 = 0; i1<18; i1++){
-                Tile currentTile = Tile.board[i][i1];
-                if (currentTile.colour != null) {
-                    g2.setColor(currentTile.colour);
-                    g2.fillRect(currentTile.x, currentTile.y, tileSize, tileSize);
+        for (Tile[] row: Tile.board){
+            for (Tile tile: row){
+                if (tile.colour != null) {
+                    g2.setColor(tile.colour);
+                    g2.fillRect(tile.x, tile.y, tileSize, tileSize);
                     g2.setColor(borderColour);
-                    g2.drawRect(currentTile.x,currentTile.y,tileSize,tileSize);
+                    g2.drawRect(tile.x,tile.y,tileSize,tileSize);
                 }
                 }
             }
