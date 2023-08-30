@@ -28,8 +28,8 @@ public class KeyHandler  implements KeyListener {
         }
         if (code == KeyEvent.VK_A || code == 37){  // 37 = left arrow
              if (!leftBlocked){
+                 Tile.UpdatePieceList(GamePanel.pieceX, GamePanel.pieceY);
                  if (!Tile.CollisionCheck()) {
-                     System.out.println("passed");
                      GamePanel.pieceX -= 1;
                      Tile.ResetMovingTiles();
                  }
@@ -50,13 +50,14 @@ public class KeyHandler  implements KeyListener {
         }
         if (code == KeyEvent.VK_D || code == 39){ // 39 = right arrow
             if (!rightBlocked){
-                System.out.println("passed");
-                GamePanel.pieceX += 1;
-                Tile.ResetMovingTiles();
-
+                Tile.UpdatePieceList(GamePanel.pieceX, GamePanel.pieceY);
+                if (!Tile.CollisionCheck()) {
+                    GamePanel.pieceX += 1;
+                    Tile.ResetMovingTiles();
+                }
             }
-
         }
+
 
     }
 

@@ -26,11 +26,10 @@ public class GamePanel extends JPanel implements Runnable{
     Thread gameThread;
 
     //Set piece's default position
-    static int pieceX = 4; //not actual x and y values, just used for index ing of Tile.board
-    int pieceY = 2;
+    static int pieceX = 4; //not actual x and y values, just used for indexing of Tile.board
+    static int pieceY = 2;
     public static String currentPiece = "T_Piece";
     static int pieceRotation = 0;//in degrees going clockwise
-//    Tile[] tilesInPiece = new Tile[n]; fix for collision
 
 
     public GamePanel(){

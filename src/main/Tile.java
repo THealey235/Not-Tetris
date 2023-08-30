@@ -9,13 +9,23 @@ public class Tile {
     public Color colour = null;
     public int x;
     public int y;
+    //explained in constructor
+    public int X;
+    public int Y;
     public static Tile[][] board = new Tile[10][18];
     private boolean stationary = false;
     public static ArrayList<Tile> partOfTetromino = new ArrayList<>();
+    static boolean isColliding = false;
+    boolean touchingStatic = false;
 
     public Tile(int x, int y){
+        //Relative to the GamePanel
         this.x = x;
         this.y = y;
+        //Relative to the board
+        this.X = (x-60)/48;
+        this.Y = (y-50)/48;
+
     }
 
     public static void CreateTiles(){
@@ -44,7 +54,6 @@ public class Tile {
             case "Line" -> Tile.UpdateListLine(x, y);
             case "L_Left" -> Tile.UpdateListL_Left(x, y);
             case "L_Right" -> Tile.UpdateListL_Right(x, y);
-            // the square doesn't rotate
             case "Square" -> {
                 for (int r = x; r < x + 2; r++) {
                     Tile.partOfTetromino.add(Tile.board[r][y]);
@@ -57,6 +66,35 @@ public class Tile {
             case "S_Right" -> Tile.UpdateListS_Right(x, y);
             case "T_Piece" -> Tile.UpdateListT_Piece(x, y);
         }
+    }
+
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    public static boolean CollisionCheck(){
+        isColliding = false;
+        for (Tile currentTile: partOfTetromino){
+            if (currentTile.touchingStatic) {
+                System.out.println("passed 1");
+                isColliding = true;
+                for (Tile tile : partOfTetromino)
+                    tile.stationary = true;
+                break;
+            }
+            if (currentTile.Y == 17){
+                System.out.println("passed 2");
+                isColliding = true;
+                for(Tile tile: partOfTetromino)
+                    tile.stationary = true;
+            }
+            if (currentTile.X == 0){
+                System.out.println("passed 3");
+                isColliding = true;
+            }
+            if (currentTile.X == 9){
+                System.out.println("Passed 4");
+                isColliding = true;
+            }
+        }
+        return isColliding;
     }
 
     public static void ResetMovingTiles() {
@@ -92,6 +130,7 @@ public class Tile {
             }
         }
     }
+
     public static void UpdateL_Left(int x, int y){
         switch (GamePanel.pieceRotation) {
             case 0 -> {
@@ -178,6 +217,7 @@ public class Tile {
             }
         }
     }
+
     public static void UpdateListLine(int x, int y){
         switch (GamePanel.pieceRotation) {
             case 0 -> {
@@ -198,6 +238,7 @@ public class Tile {
             }
         }
     }
+
     public static void UpdateListL_Left(int x, int y){
         switch (GamePanel.pieceRotation) {
             case 0 -> {
@@ -285,12 +326,5 @@ public class Tile {
         }
     }
 
-    public static boolean CollisionCheck(){
-        for (int i = 0; i < 4; i++){
-            Tile currentTile = Tile.partOfTetromino.get(i);
-            System.out.println(currentTile);
-            //Finish collision
-        }
-        return true;
-    }
+
 }
