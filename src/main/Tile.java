@@ -1,7 +1,8 @@
 package main;
 
 import java.awt.Color;
-import java.util.List;
+import java.util.Arrays;
+import java.util.ArrayList;
 
 public class Tile {
 
@@ -10,7 +11,7 @@ public class Tile {
     public int y;
     public static Tile[][] board = new Tile[10][18];
     private boolean stationary = false;
-    public static List<Tile> partOfTetromino;
+    public static ArrayList<Tile> partOfTetromino = new ArrayList<>();
 
     public Tile(int x, int y){
         this.x = x;
@@ -36,6 +37,26 @@ public class Tile {
             case "S_Right" -> Tile.UpdateS_Right(x, y);
             case "T_Piece" -> Tile.UpdateT_Piece(x, y);
         }
+
+    }
+    public static void UpdatePieceList(int x, int y) {
+        switch (GamePanel.currentPiece) {
+            case "Line" -> Tile.UpdateListLine(x, y);
+            case "L_Left" -> Tile.UpdateListL_Left(x, y);
+            case "L_Right" -> Tile.UpdateListL_Right(x, y);
+            // the square doesn't rotate
+            case "Square" -> {
+                for (int r = x; r < x + 2; r++) {
+                    Tile.partOfTetromino.add(Tile.board[r][y]);
+                }
+                for (int r = x; r < x + 2; r++) {
+                    Tile.partOfTetromino.add(Tile.board[r][y - 1]);
+                }
+            }
+            case "S_Left" -> Tile.UpdateListS_Left(x, y);
+            case "S_Right" -> Tile.UpdateListS_Right(x, y);
+            case "T_Piece" -> Tile.UpdateListT_Piece(x, y);
+        }
     }
 
     public static void ResetMovingTiles() {
@@ -56,26 +77,18 @@ public class Tile {
             case 0 -> {
                 for (int i = x; i < x + 3; i++) {Tile.board[i][y].colour = Color.cyan;}
                 Tile.board[x-1][y].colour = Color.cyan;
-                for (int i = x; i < x + 3; i++) {partOfTetromino.add(Tile.board[i][y]);}
-                partOfTetromino.add(Tile.board[x-1][y]);
             }
             case 90 -> {
                 for (int i = y; i < y + 3; i++) {Tile.board[x][i].colour = Color.cyan;}
                 Tile.board[x][y - 1].colour = Color.cyan;
-                for (int i = y; i < y + 3; i++) {partOfTetromino.add(Tile.board[x][i]);}
-                partOfTetromino.add(Tile.board[x][y - 1]);
             }
             case 180 -> {
                 for (int i = x; i > x - 3; i--) {Tile.board[i][y].colour = Color.cyan;}
                 Tile.board[x+1][y].colour = Color.cyan;
-                for (int i = x; i > x - 3; i--) {partOfTetromino.add(Tile.board[i][y]);}
-                partOfTetromino.add(Tile.board[x+1][y]);
             }
             case 270 -> {
                 for (int i = y; i > y - 3; i--) {Tile.board[x][i].colour = Color.cyan;}
                 Tile.board[x][y + 1].colour = Color.cyan;
-                for (int i = y; i > y - 3; i--) {partOfTetromino.add(Tile.board[x][i]);}
-                partOfTetromino.add(Tile.board[x][y + 1]);
             }
         }
     }
@@ -84,26 +97,18 @@ public class Tile {
             case 0 -> {
                 for (int i = x; i < x + 3; i++) {Tile.board[i][y].colour = Color.blue;}
                 Tile.board[x][y - 1].colour = Color.blue;
-                for (int i = x; i < x + 3; i++) {partOfTetromino.add(Tile.board[i][y]);}
-                partOfTetromino.add(Tile.board[x][y - 1]);
             }
             case 90 -> {
                 for (int i = y; i < y + 3; i++) {Tile.board[x][i].colour = Color.blue;}
                 Tile.board[x + 1][y].colour = Color.blue;
-                for (int i = y; i < y + 3; i++) {partOfTetromino.add(Tile.board[x][i]);}
-                partOfTetromino.add(Tile.board[x + 1][y]);
             }
             case 180 -> {
                 for (int i = x; i > x - 3; i--) {Tile.board[i][y].colour = Color.blue;}
                 Tile.board[x][y + 1].colour = Color.blue;
-                for (int i = x; i > x - 3; i--) {partOfTetromino.add(Tile.board[i][y]);}
-                partOfTetromino.add(Tile.board[x][y + 1]);
             }
             case 270 -> {
                 for (int i = y; i > y - 3; i--) {Tile.board[x][i].colour = Color.blue;}
                 Tile.board[x - 1][y].colour = Color.blue;
-                for (int i = y; i > y - 3; i--) {partOfTetromino.add(Tile.board[x][i]);}
-                partOfTetromino.add(Tile.board[x - 1][y]);
             }
         }
     }
@@ -113,26 +118,18 @@ public class Tile {
             case 0 -> {
                 for(int i = x; i>x-3; i--){Tile.board[i][y].colour = Color.orange;}
                 Tile.board[x][y-1].colour = Color.orange;
-                for(int i = x; i>x-3; i--){partOfTetromino.add(Tile.board[i][y]);}
-                partOfTetromino.add(Tile.board[x][y-1]);
             }
             case 90 -> {
                 for (int i = y; i > y - 3; i--) {Tile.board[x][i].colour = Color.orange;}
                 Tile.board[x + 1][y].colour = Color.orange;
-                for (int i = y; i > y - 3; i--) {partOfTetromino.add(Tile.board[x][i]);}
-                partOfTetromino.add(Tile.board[x + 1][y]);
             }
             case 180 -> {
                 for(int i = x; i<x+3; i++){Tile.board[i][y].colour = Color.orange;}
                 Tile.board[x][y+1].colour = Color.orange;
-                for(int i = x; i<x+3; i++){partOfTetromino.add(Tile.board[i][y]);}
-                partOfTetromino.add(Tile.board[x][y+1]);
             }
             case 270 -> {
                 for (int i = y; i < y + 3; i++) {Tile.board[x][i].colour = Color.orange;}
                 Tile.board[x - 1][y].colour = Color.orange;
-                for (int i = y; i < y + 3; i++) {partOfTetromino.add(Tile.board[x][i]);}
-                partOfTetromino.add(Tile.board[x - 1][y]);
             }
         }
     }
@@ -141,14 +138,10 @@ public class Tile {
         if (GamePanel.pieceRotation == 0 || GamePanel.pieceRotation == 180) {
             Tile.board[x][y].colour = Color.red;Tile.board[x-1][y].colour = Color.red;
             Tile.board[x][y+1].colour = Color.red;Tile.board[x+1][y+1].colour = Color.red;
-            partOfTetromino.add(Tile.board[x][y]);partOfTetromino.add(Tile.board[x-1][y]);
-            partOfTetromino.add(Tile.board[x][y+1]);partOfTetromino.add(Tile.board[x+1][y+1]);
         }
         else{
             Tile.board[x][y].colour = Color.red;Tile.board[x][y-1].colour = Color.red;
             Tile.board[x-1][y].colour = Color.red;Tile.board[x-1][y+1].colour = Color.red;
-            partOfTetromino.add(Tile.board[x][y]);partOfTetromino.add(Tile.board[x][y-1]);
-            partOfTetromino.add(Tile.board[x-1][y]);partOfTetromino.add(Tile.board[x-1][y+1]);
         }
 
     }
@@ -157,14 +150,10 @@ public class Tile {
         if (GamePanel.pieceRotation == 0 || GamePanel.pieceRotation == 180) {
             Tile.board[x][y].colour = Color.green;Tile.board[x+1][y].colour = Color.green;
             Tile.board[x][y-1].colour = Color.green;Tile.board[x-1][y-1].colour = Color.green;
-            partOfTetromino.add(Tile.board[x][y]);partOfTetromino.add(Tile.board[x+1][y]);
-            partOfTetromino.add(Tile.board[x][y-1]);partOfTetromino.add(Tile.board[x-1][y-1]);
         }
         else{
             Tile.board[x-1][y-1].colour = Color.green;Tile.board[x-1][y].colour = Color.green;
             Tile.board[x][y-1].colour = Color.green;Tile.board[x][y-2].colour = Color.green;
-            partOfTetromino.add(Tile.board[x-1][y-1]);partOfTetromino.add(Tile.board[x-1][y]);
-            partOfTetromino.add(Tile.board[x][y-1]);partOfTetromino.add(Tile.board[x][y-2]);
         }
 
     }
@@ -174,24 +163,122 @@ public class Tile {
             case 0 -> {
                 Tile.board[x][y].colour = GamePanel.colourPurple;Tile.board[x+1][y].colour = GamePanel.colourPurple;
                 Tile.board[x-1][y].colour = GamePanel.colourPurple;Tile.board[x][y-1].colour = GamePanel.colourPurple;
-                partOfTetromino.add(Tile.board[x][y]);partOfTetromino.add(Tile.board[x+1][y]);
-                partOfTetromino.add(Tile.board[x-1][y]);partOfTetromino.add(Tile.board[x][y-1]);
             }
             case 90 -> {
                 Tile.board[x][y].colour = GamePanel.colourPurple;Tile.board[x][y+1].colour = GamePanel.colourPurple;
                 Tile.board[x][y-1].colour = GamePanel.colourPurple;Tile.board[x+1][y].colour = GamePanel.colourPurple;
-                partOfTetromino.add(Tile.board[x][y]);partOfTetromino.add(Tile.board[x][y+1]);
-                partOfTetromino.add(Tile.board[x][y-1]);partOfTetromino.add(Tile.board[x+1][y]);
             }
             case 180 -> {
                 Tile.board[x][y].colour = GamePanel.colourPurple;Tile.board[x+1][y].colour = GamePanel.colourPurple;
                 Tile.board[x-1][y].colour = GamePanel.colourPurple;Tile.board[x][y+1].colour = GamePanel.colourPurple;
-                partOfTetromino.add(Tile.board[x][y]);partOfTetromino.add(Tile.board[x+1][y]);
-                partOfTetromino.add(Tile.board[x-1][y]);partOfTetromino.add(Tile.board[x][y+1]);
             }
             case 270 -> {
                 Tile.board[x][y].colour = GamePanel.colourPurple;Tile.board[x][y+1].colour = GamePanel.colourPurple;
                 Tile.board[x][y-1].colour = GamePanel.colourPurple;Tile.board[x-1][y].colour = GamePanel.colourPurple;
+            }
+        }
+    }
+    public static void UpdateListLine(int x, int y){
+        switch (GamePanel.pieceRotation) {
+            case 0 -> {
+                for (int i = x; i < x + 3; i++) {partOfTetromino.add(Tile.board[i][y]);}
+                partOfTetromino.add(Tile.board[x-1][y]);
+            }
+            case 90 -> {
+                partOfTetromino.addAll(Arrays.asList(Tile.board[x]).subList(y, y + 3));
+                partOfTetromino.add(Tile.board[x][y - 1]);
+            }
+            case 180 -> {
+                for (int i = x; i > x - 3; i--) {partOfTetromino.add(Tile.board[i][y]);}
+                partOfTetromino.add(Tile.board[x+1][y]);
+            }
+            case 270 -> {
+                for (int i = y; i > y - 3; i--) {partOfTetromino.add(Tile.board[x][i]);}
+                partOfTetromino.add(Tile.board[x][y + 1]);
+            }
+        }
+    }
+    public static void UpdateListL_Left(int x, int y){
+        switch (GamePanel.pieceRotation) {
+            case 0 -> {
+                for (int i = x; i < x + 3; i++) {partOfTetromino.add(Tile.board[i][y]);}
+                partOfTetromino.add(Tile.board[x][y - 1]);
+            }
+            case 90 -> {
+                partOfTetromino.addAll(Arrays.asList(Tile.board[x]).subList(y, y + 3));
+                partOfTetromino.add(Tile.board[x + 1][y]);
+            }
+            case 180 -> {
+                for (int i = x; i > x - 3; i--) {partOfTetromino.add(Tile.board[i][y]);}
+                partOfTetromino.add(Tile.board[x][y + 1]);
+            }
+            case 270 -> {
+                for (int i = y; i > y - 3; i--) {partOfTetromino.add(Tile.board[x][i]);}
+                partOfTetromino.add(Tile.board[x - 1][y]);
+            }
+        }
+    }
+
+    public static void UpdateListL_Right(int x, int y){
+        switch (GamePanel.pieceRotation) {
+            case 0 -> {
+                for(int i = x; i>x-3; i--){partOfTetromino.add(Tile.board[i][y]);}
+                partOfTetromino.add(Tile.board[x][y-1]);
+            }
+            case 90 -> {
+                for (int i = y; i > y - 3; i--) {partOfTetromino.add(Tile.board[x][i]);}
+                partOfTetromino.add(Tile.board[x + 1][y]);
+            }
+            case 180 -> {
+                for(int i = x; i<x+3; i++){partOfTetromino.add(Tile.board[i][y]);}
+                partOfTetromino.add(Tile.board[x][y+1]);
+            }
+            case 270 -> {
+                partOfTetromino.addAll(Arrays.asList(Tile.board[x]).subList(y, y + 3));
+                partOfTetromino.add(Tile.board[x - 1][y]);
+            }
+        }
+    }
+
+    public static void UpdateListS_Left (int x, int y){
+        if (GamePanel.pieceRotation == 0 || GamePanel.pieceRotation == 180) {
+            partOfTetromino.add(Tile.board[x][y]);partOfTetromino.add(Tile.board[x-1][y]);
+            partOfTetromino.add(Tile.board[x][y+1]);partOfTetromino.add(Tile.board[x+1][y+1]);
+        }
+        else{
+            partOfTetromino.add(Tile.board[x][y]);partOfTetromino.add(Tile.board[x][y-1]);
+            partOfTetromino.add(Tile.board[x-1][y]);partOfTetromino.add(Tile.board[x-1][y+1]);
+        }
+
+    }
+
+    public static void UpdateListS_Right (int x, int y){
+        if (GamePanel.pieceRotation == 0 || GamePanel.pieceRotation == 180) {
+            partOfTetromino.add(Tile.board[x][y]);partOfTetromino.add(Tile.board[x+1][y]);
+            partOfTetromino.add(Tile.board[x][y-1]);partOfTetromino.add(Tile.board[x-1][y-1]);
+        }
+        else{
+            partOfTetromino.add(Tile.board[x-1][y-1]);partOfTetromino.add(Tile.board[x-1][y]);
+            partOfTetromino.add(Tile.board[x][y-1]);partOfTetromino.add(Tile.board[x][y-2]);
+        }
+
+    }
+
+    public static void UpdateListT_Piece(int x, int y){
+        switch (GamePanel.pieceRotation) {
+            case 0 -> {
+                partOfTetromino.add(Tile.board[x][y]);partOfTetromino.add(Tile.board[x+1][y]);
+                partOfTetromino.add(Tile.board[x-1][y]);partOfTetromino.add(Tile.board[x][y-1]);
+            }
+            case 90 -> {
+                partOfTetromino.add(Tile.board[x][y]);partOfTetromino.add(Tile.board[x][y+1]);
+                partOfTetromino.add(Tile.board[x][y-1]);partOfTetromino.add(Tile.board[x+1][y]);
+            }
+            case 180 -> {
+                partOfTetromino.add(Tile.board[x][y]);partOfTetromino.add(Tile.board[x+1][y]);
+                partOfTetromino.add(Tile.board[x-1][y]);partOfTetromino.add(Tile.board[x][y+1]);
+            }
+            case 270 -> {
                 partOfTetromino.add(Tile.board[x][y]);partOfTetromino.add(Tile.board[x][y+1]);
                 partOfTetromino.add(Tile.board[x][y-1]);partOfTetromino.add(Tile.board[x-1][y]);
             }
@@ -201,7 +288,9 @@ public class Tile {
     public static boolean CollisionCheck(){
         for (int i = 0; i < 4; i++){
             Tile currentTile = Tile.partOfTetromino.get(i);
+            System.out.println(currentTile);
             //Finish collision
         }
+        return true;
     }
 }

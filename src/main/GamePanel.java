@@ -20,19 +20,15 @@ public class GamePanel extends JPanel implements Runnable{
     Color borderColour= Color.white;
     Color colourGrey = new Color(90,90,90);
     public static Color colourPurple = new Color(128,0,128);
-    public static Color pieceColour;
 
 
     KeyHandler keyH = new KeyHandler();
     Thread gameThread;
 
     //Set piece's default position
-    final int startX = 4;
-    final int startY = 2;
     static int pieceX = 4; //not actual x and y values, just used for index ing of Tile.board
     int pieceY = 2;
     public static String currentPiece = "T_Piece";
-    int pieceSpeed = 4;
     static int pieceRotation = 0;//in degrees going clockwise
 //    Tile[] tilesInPiece = new Tile[n]; fix for collision
 
