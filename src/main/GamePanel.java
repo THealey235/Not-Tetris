@@ -22,13 +22,13 @@ public class GamePanel extends JPanel implements Runnable{
     public static Color colourPurple = new Color(128,0,128);
 
 
-    KeyHandler keyH = new KeyHandler();
+    public static KeyHandler keyH = new KeyHandler();
     Thread gameThread;
 
     //Set piece's default position
     static int pieceX = 4; //not actual x and y values, just used for indexing of Tile.board
-    static int pieceY = 2;
-    public static String currentPiece = "T_Piece";
+    static int pieceY = 16;
+    public static String currentPiece = "L_Left";
     static int pieceRotation = 0;//in degrees going clockwise
 
 
@@ -45,21 +45,61 @@ public class GamePanel extends JPanel implements Runnable{
         gameThread.start();
     }
 
-    //in short: the game loop
+
+
+
+    //the game loop
     @Override
     public void run() {
 
+        int FPS = 30;
+        double drawInterval = 1000000000d/FPS; //0.01666666 seconds
+        double delta = 0;
+        long lastTime = System.nanoTime();
+        long currentTime;
+        long timer = 0;
+        int drawCount = 0;
+
         while(gameThread != null){
-           //1 UPDATE: update information such as character positions
-           update();
-           //2 DRAW: draw the screen with the update information
-           repaint();
+
+            currentTime = System.nanoTime();
+            timer += (currentTime - lastTime);
+            delta += (currentTime-lastTime) / drawInterval;
+
+            lastTime = currentTime;
+
+            //for when I do fast drop: drawCount == FPS/3 || drawCount == (FPS/3)*2 ||
+
+            if (delta >= 1) {
+                update();
+                repaint();
+                delta--;
+                drawCount++;
+            }
+            if (timer >= 1000000000){
+                gravity();
+                System.out.println("FPS: " + drawCount);
+                drawCount = 0;
+                timer = 0;
+            }
+
         }
 
     }
     public void update(){
         Tile.UpdateColourOfTiles(pieceX, pieceY);
+        Tile.UpdateStationary();
     }
+
+    public void gravity(){
+        if (Tile.CollisionCheck() != 1){
+            pieceY += 1;
+            Tile.ResetMovingTiles();
+            Tile.UpdatePieceList(GamePanel.pieceX, GamePanel.pieceY);
+        }
+    }
+
+
     public void paintComponent(Graphics g){
 
         super.paintComponent(g);

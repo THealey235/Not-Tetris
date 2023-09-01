@@ -5,8 +5,8 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler  implements KeyListener {
 
-    private boolean upBlocked, downBlocked, rightBlocked, leftBlocked = false;
-
+    public boolean upBlocked, downBlocked, rightBlocked, leftBlocked= false;
+    int code, collisionType;
     @Override
     public void keyTyped(KeyEvent e) {
         //unused
@@ -14,47 +14,56 @@ public class KeyHandler  implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        int code = e.getKeyCode(); //returns number of key pressed
-
+        code = e.getKeyCode(); //returns number of key pressed
+        collisionType = Tile.CollisionCheck();
         if (code == KeyEvent.VK_W || code == 38){ // 38 = up arrow
             if (!upBlocked){
                 GamePanel.pieceRotation += 90;
                 if (GamePanel.pieceRotation == 360){
                     GamePanel.pieceRotation = 0;
                 }
-                System.out.println("W "+GamePanel.pieceRotation);
+                try{
+                    Tile.ResetMovingTiles();
+                }
+                catch (ArrayIndexOutOfBoundsException exception){
+                    GamePanel.pieceRotation -= 90;
+                }
                 Tile.ResetMovingTiles();
             }
         }
         if (code == KeyEvent.VK_A || code == 37){  // 37 = left arrow
-             if (!leftBlocked){
+            Tile.UpdatePieceList(GamePanel.pieceX, GamePanel.pieceY);
+             if (!leftBlocked || collisionType != 2){
+                 GamePanel.pieceX -= 1;
+                 Tile.ResetMovingTiles();
                  Tile.UpdatePieceList(GamePanel.pieceX, GamePanel.pieceY);
-                 if (!Tile.CollisionCheck()) {
-                     GamePanel.pieceX -= 1;
-                     Tile.ResetMovingTiles();
-                 }
+
+
             }
         }
         if (code == KeyEvent.VK_S || code == 40){ // 40 = down arrow
             if (!downBlocked){
-
                 if (GamePanel.pieceRotation == 0){
                     GamePanel.pieceRotation = 270;
                 }
                 else{
                     GamePanel.pieceRotation -= 90;
                 }
+                try{
+                    Tile.ResetMovingTiles();
+                }
+                catch (ArrayIndexOutOfBoundsException exception){
+                    GamePanel.pieceRotation += 90;
+                }
                 Tile.ResetMovingTiles();
-                System.out.println("S "+GamePanel.pieceRotation);
             }
         }
         if (code == KeyEvent.VK_D || code == 39){ // 39 = right arrow
-            if (!rightBlocked){
+            Tile.UpdatePieceList(GamePanel.pieceX, GamePanel.pieceY);
+            if (!rightBlocked || collisionType != 3){
+                GamePanel.pieceX += 1;
+                Tile.ResetMovingTiles();
                 Tile.UpdatePieceList(GamePanel.pieceX, GamePanel.pieceY);
-                if (!Tile.CollisionCheck()) {
-                    GamePanel.pieceX += 1;
-                    Tile.ResetMovingTiles();
-                }
             }
         }
 
